@@ -5,10 +5,12 @@
 #include <stdlib.h> 
 #include <string.h> 
 #include <sys/socket.h> 
+#include <dirent.h>
 #define MAX 80 
 #define PORT 8080 
 #define SA struct sockaddr
- 
+  
+  
 void func(int sockfd) 
 { 
     char buff[MAX]; 
@@ -29,7 +31,7 @@ void func(int sockfd)
         } 
     } 
 } 
-  
+
 int main() 
 { 
     int sockfd, connfd; 
@@ -60,6 +62,23 @@ int main()
   
     // function for chat 
     func(sockfd); 
+     struct dirent *de;  // Pointer for directory entry 
+  
+    // opendir() returns a pointer of DIR type.  
+    DIR *dr = opendir("."); 
+  
+    if (dr == NULL)  // opendir returns NULL if couldn't open directory 
+    { 
+        printf("Could not open current directory" ); 
+        return 0; 
+    } 
+  
+    
+    // for readdir() 
+    while ((de = readdir(dr)) != NULL) 
+            printf("%s\n", de->d_name); 
+  
+    closedir(dr);     
   
     // close the socket 
     close(sockfd); 
